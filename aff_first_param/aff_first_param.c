@@ -1,52 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   buzz_fizz.c                                        :+:      :+:    :+:   */
+/*   aff_first_param.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/19 13:58:42 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/19 14:06:05 by imarushe         ###   ########.fr       */
+/*   Created: 2022/01/19 14:32:33 by imarushe          #+#    #+#             */
+/*   Updated: 2022/01/19 14:37:27 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 
-void	ft_putstr(char *str)
+int	main(int argc, char *argv[])
 {
 	int	i;
 
 	i = 0;
-	while (str[i])
+	if (argc > 1)
 	{
-		write(1, &str[i], 1);
-		i++;
+		while (argv[1][i])
+		{
+			write(1, &argv[1][i], 1);
+			i++;
+		}
 	}
-}
-
-void	ft_putnbr(int i)
-{
-	if (i > 9)
-		ft_putnbr(i / 10);
-	i = i % 10 + 48;
-	write(1, &i, 1);
-}
-
-int	main(void)
-{
-	int	i;
-
-	i = 1;
-	while (i <= 100)
-	{
-		if (i % 4 != 0 && i % 7 != 0)
-			ft_putnbr(i);
-		if (i % 4 == 0)
-			ft_putstr("buzz");
-		if (i % 7 == 0)
-			ft_putstr("fizz");
-		write(1, "\n", 1);
-		i++;
-	}
+	write(1, "\n", 1);
 	return (0);
 }
