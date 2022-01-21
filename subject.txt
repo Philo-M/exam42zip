@@ -1,13 +1,14 @@
 1.	aff_z				aff_a
 2.	rev_print			ft_strlen
 3.	buzz_fizz
-4.	aff_first_param		aff_last_param			
-5.	rotone								rot_13
-6.	inter				union				inter
+4.	aff_first_param		aff_last_param
+5.	rotone				rot_13
+6.	inter				union
 7.	ft_range			ft_rrange			ft_itoa
-									ft_split
+8.	ft_split
+9.	ft_list_remove_if
 
-	ft_itoa			ft_split
+	sort_list
 	ft_prime			ft_itoa_base
 	brackets			biggest_pal
 
