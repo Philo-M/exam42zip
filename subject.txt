@@ -8,7 +8,7 @@
 8.	ft_split
 9.	ft_list_remove_if
 
-	sort_list
+	sort_list			ft_list_foreach
 	ft_prime			ft_itoa_base
 	brackets			biggest_pal
 
