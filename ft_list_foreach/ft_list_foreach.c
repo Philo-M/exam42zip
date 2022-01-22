@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 20:41:24 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/22 12:46:16 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/01/22 21:08:54 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	ft_list_foreach(t_list *begin_list, void (*f)(void *))
 	list = begin_list;
 	while (list)
 	{
-		f(list->data);
+		(*f)(list->data);
 		list = list->next;
 	}
 }

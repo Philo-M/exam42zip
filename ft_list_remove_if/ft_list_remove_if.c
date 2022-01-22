@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 10:54:10 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/21 14:45:14 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/01/22 18:44:00 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)())
 			list->next = list->next->next;
 			free(temp);
 		}
-		else if (list->next)
+		else
 			list = list->next;
 	}
 }
@@ -63,7 +63,7 @@ int	main(void)
 	list->next->next->next = malloc(sizeof(t_list *));
 	list->next->next->next->data = &j;
 	list->next->next->next->next = NULL;
-	ft_list_remove_if(&list, &i, cmp);
+	ft_list_remove_if(&list, &j, cmp);
 	while (list)
 	{
 		printf("%d\n", *(int *)list->data);

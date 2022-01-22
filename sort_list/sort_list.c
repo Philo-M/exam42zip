@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 15:20:19 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/21 16:13:55 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/01/22 21:21:40 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,29 +23,23 @@ t_list	*sort_list(t_list *lst, int (*cmp)(int, int))
 {
 	int		*swap;
 	t_list	*first;
-	int		unsort;
 
-	unsort = 1;
 	first = lst;
-	while (unsort)
+	while (lst->next)
 	{
-		lst = first;
-		unsort = 0;
-		while (lst && lst->next)
+		if (!cmp(*(int *)lst->data, *(int *)lst->next->data))
 		{
-			if (!cmp(*(int *)lst->data, *(int *)lst->next->data))
-			{
-				swap = lst->data;
-				lst->data = lst->next->data;
-				lst->next->data = swap;
-				unsort = 1;
-			}
-			else if (lst->next)
-				lst = lst->next;
+			swap = lst->data;
+			lst->data = lst->next->data;
+			lst->next->data = swap;
+			lst = first;
 		}
+		else 
+			lst = lst->next;
 	}
 	return (first);
 }
+
 
 int	main(void)
 {
