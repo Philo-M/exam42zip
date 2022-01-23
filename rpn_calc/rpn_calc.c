@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/23 18:00:28 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/23 19:56:12 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/01/23 22:35:57 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,18 +83,21 @@ int	main(int argc, char *argv[])
 		size = ft_strlen(argv[1]) - 1;
 		i = size;
 		printf("op %d, size %d, ", op, size);
-		while (i >= 0)
+		while (op)
 		{
 			while (op - step != 0)
 			{
 				while (!ft_op(argv[1][i]))
 					i--;
 				if (ft_op(argv[1][i]))
+				{
 					step++;
+					i--;
+				}
 			}
 			op--;
-			printf("i %d\n", i);
-			j = 1;
+			printf("step %d, i %d\n", step, i);
+			j = 0;
 			if (!a)
 			{
 				
@@ -102,10 +105,12 @@ int	main(int argc, char *argv[])
 					j++;
 				if (ft_digit(argv[1][i - j]))
 				{
+					k = 0;
 					while (ft_digit(argv[1][i - j]))
 						j++;
-					k = 0;
-					while (j - k != 0)
+					j--;
+					printf("j %d\n", j);
+					while (ft_digit(argv[1][i - j + k]))
 					{
 						temp[k] = argv[1][i - j + k];
 						argv[1][i - j + k] = 32;
@@ -113,17 +118,20 @@ int	main(int argc, char *argv[])
 					}
 					temp[k] = '\0';
 					a = atoi(temp);
+					printf("a %d, i %d\n", a, i); 
 				}
 			}
-			
+			j = 0;
 			while (!ft_digit(argv[1][i - j]))
 				j++;
 			if (ft_digit(argv[1][i - j]))
 			{
+				k = 0;
 				while (ft_digit(argv[1][i - j]))
 					j++;
-				k = 0;
-				while (j - k != 0)
+				j--;
+				printf("j %d\n", j);
+				while (ft_digit(argv[1][i - j + k]))
 				{
 					temp[k] = argv[1][i - j + k];
 					argv[1][i - j + k] = 32;
@@ -131,7 +139,9 @@ int	main(int argc, char *argv[])
 				}
 				temp[k] = '\0';
 				b = atoi(temp);
+				printf("b %d, i %d\n", b, i);
 			}
+			printf("op %s\n", &argv[1][i]);
 			if (ft_op(argv[1][i]))
 			{
 				if (argv[1][i] == '+')
@@ -146,8 +156,8 @@ int	main(int argc, char *argv[])
 					a %= b;
 				argv[1][i] = 32;
 			}
-			if (i >= 0)
-				i = size;
+			printf("res %d\n", a);
+			i = size;
 		}
 		printf("%d", a); 
 	}
