@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/23 18:00:28 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/23 22:35:57 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/01/24 11:27:16 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	main(int argc, char *argv[])
 	int		j;
 	int		k;
 	int		op;
-	int		digit;
+	int		swap;
 	int		a;
 	int		b;
 	int		step;
@@ -53,11 +53,11 @@ int	main(int argc, char *argv[])
 
 	i = 0;
 	op = 0;
-	digit = 0;
-	step = 0;
+//	digit = 0;
+//	step = 0;
 	a = 0;
 	if (argc != 2)
-		write(1, "Error\n", 6);
+		write(1, "AError\n", 7);
 	else
 	{
 		while (argv[1][i])
@@ -66,25 +66,25 @@ int	main(int argc, char *argv[])
 				i++;
 			if (ft_op(argv[1][i]))
 				op++;
-			else if (ft_digit(argv[1][i]))
-				digit++;
-			else
+			if (argv[1][i] != 32 && !ft_digit(argv[1][i]) && !ft_op(argv[1][i]))
 			{
-				write(1, "Error\n", 6);
+				write(1, "1Error\n", 7);
 				return (1);
 			}
 			i++;
 		}
-		if (digit - 1 != op)
+/*		if (digit - 1 != op)
 		{
-			write(1, "Error\n", 6);
+			write(1, "2Error\n", 7);
 			return (1);
-		}
+		}*/
 		size = ft_strlen(argv[1]) - 1;
 		i = size;
-		printf("op %d, size %d, ", op, size);
 		while (op)
 		{
+			step = 0;
+			printf("start\n");
+//			printf("op %d", op);
 			while (op - step != 0)
 			{
 				while (!ft_op(argv[1][i]))
@@ -96,6 +96,7 @@ int	main(int argc, char *argv[])
 				}
 			}
 			op--;
+			i++;
 			printf("step %d, i %d\n", step, i);
 			j = 0;
 			if (!a)
@@ -141,25 +142,43 @@ int	main(int argc, char *argv[])
 				b = atoi(temp);
 				printf("b %d, i %d\n", b, i);
 			}
-			printf("op %s\n", &argv[1][i]);
+			if (step == 1)
+			{
+				swap = a;
+				a = b;
+				b = swap;
+				printf("a %d, b %d\n", a, b);
+			}
+			printf("ft_op %d, op %s, a %d, b %d\n", ft_op(argv[1][i]), &argv[1][i], a, b);
 			if (ft_op(argv[1][i]))
 			{
 				if (argv[1][i] == '+')
-					a += b;
+				{
+					printf("a %d, b %d\n", a, b);
+					b += a;
+				}
 				if (argv[1][i] == '-')
-					a -= b;
+					b -= a;
 				if (argv[1][i] == '*')
-					a += b;
+					b *= a;
 				if (argv[1][i] == '/')
-					a /= b;
+					b /= a;
 				if (argv[1][i] == '%')
-					a %= b;
+					b %= a;
 				argv[1][i] = 32;
 			}
-			printf("res %d\n", a);
+			a = b;
+			printf("res %d, step %d, i %d, size %d, op %d, len %d, %s\n", b, step, i, size, op, ft_strlen(argv[1]), argv[1]);
 			i = size;
+			printf("end\n");
 		}
-		printf("%d", a); 
+		i = 0;
+		while (argv[1][i])
+		{
+			if (argv[1][i] != 32)
+				printf("Error\n");
+		}
+		printf("%d", b); 
 	}
 	return (0);
 }
