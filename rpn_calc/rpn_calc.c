@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/23 18:00:28 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/24 11:27:16 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/01/24 14:56:31 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,16 @@ int	ft_digit(char c)
 	return (0);
 }
 
-int ft_op(char c)
+int	ft_op(char *str)
 {
-	if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
-		return (1);
+	int	i;
+
+	i = 0;
+	if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' || str[i] == '%')
+	{
+		if (!ft_digit(str[i + 1]))
+			return (1);
+	}
 	return (0);
 }
 
@@ -33,172 +39,93 @@ int	ft_strlen(char *str)
 	int	i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 		i++;
 	return (i);
 }
 
-int	main(int argc, char *argv[])
+long	*ft_polish_calc(char *str)
 {
 	int		i;
 	int		j;
-	int		k;
-	int		op;
-	int		swap;
-	int		a;
-	int		b;
-	int		step;
-	int		size;
-	char	temp[256];
+	long	*result;
 
 	i = 0;
-	op = 0;
-//	digit = 0;
-//	step = 0;
-	a = 0;
-	if (argc != 2)
-		write(1, "AError\n", 7);
-	else
+	j = 0;
+	result = malloc(sizeof(long) * ft_strlen(str));
+	if (!result)
+		return (NULL);
+	while (str[i])
 	{
-		while (argv[1][i])
+		while (!ft_op(&str[i]))
 		{
-			while (argv[1][i] == 32)
+			result[j] = atoi(&str[i]);
+			j++;
+			while (str[i] && str[i] != 32)
 				i++;
-			if (ft_op(argv[1][i]))
-				op++;
-			if (argv[1][i] != 32 && !ft_digit(argv[1][i]) && !ft_op(argv[1][i]))
+			if (!str[i])
 			{
-				write(1, "1Error\n", 7);
-				return (1);
-			}
-			i++;
-		}
-/*		if (digit - 1 != op)
-		{
-			write(1, "2Error\n", 7);
-			return (1);
-		}*/
-		size = ft_strlen(argv[1]) - 1;
-		i = size;
-		while (op)
-		{
-			step = 0;
-			printf("start\n");
-//			printf("op %d", op);
-			while (op - step != 0)
-			{
-				while (!ft_op(argv[1][i]))
-					i--;
-				if (ft_op(argv[1][i]))
-				{
-					step++;
-					i--;
-				}
-			}
-			op--;
-			i++;
-			printf("step %d, i %d\n", step, i);
-			j = 0;
-			if (!a)
-			{
-				
-				while (!ft_digit(argv[1][i - j]))
-					j++;
-				if (ft_digit(argv[1][i - j]))
-				{
-					k = 0;
-					while (ft_digit(argv[1][i - j]))
-						j++;
-					j--;
-					printf("j %d\n", j);
-					while (ft_digit(argv[1][i - j + k]))
-					{
-						temp[k] = argv[1][i - j + k];
-						argv[1][i - j + k] = 32;
-						k++;
-					}
-					temp[k] = '\0';
-					a = atoi(temp);
-					printf("a %d, i %d\n", a, i); 
-				}
-			}
-			j = 0;
-			while (!ft_digit(argv[1][i - j]))
-				j++;
-			if (ft_digit(argv[1][i - j]))
-			{
-				k = 0;
-				while (ft_digit(argv[1][i - j]))
-					j++;
-				j--;
-				printf("j %d\n", j);
-				while (ft_digit(argv[1][i - j + k]))
-				{
-					temp[k] = argv[1][i - j + k];
-					argv[1][i - j + k] = 32;
-					k++;
-				}
-				temp[k] = '\0';
-				b = atoi(temp);
-				printf("b %d, i %d\n", b, i);
-			}
-			if (step == 1)
-			{
-				swap = a;
-				a = b;
-				b = swap;
-				printf("a %d, b %d\n", a, b);
-			}
-			printf("ft_op %d, op %s, a %d, b %d\n", ft_op(argv[1][i]), &argv[1][i], a, b);
-			if (ft_op(argv[1][i]))
-			{
-				if (argv[1][i] == '+')
-				{
-					printf("a %d, b %d\n", a, b);
-					b += a;
-				}
-				if (argv[1][i] == '-')
-					b -= a;
-				if (argv[1][i] == '*')
-					b *= a;
-				if (argv[1][i] == '/')
-					b /= a;
-				if (argv[1][i] == '%')
-					b %= a;
-				argv[1][i] = 32;
-			}
-			a = b;
-			printf("res %d, step %d, i %d, size %d, op %d, len %d, %s\n", b, step, i, size, op, ft_strlen(argv[1]), argv[1]);
-			i = size;
-			printf("end\n");
-		}
-		i = 0;
-		while (argv[1][i])
-		{
-			if (argv[1][i] != 32)
 				printf("Error\n");
+				return (NULL);
+			}
+			while (str[i] == 32)
+				i++;
 		}
-		printf("%d", b); 
+		if (j < 2)
+		{
+			printf("Error\n");
+			return (NULL);
+		}
+		if (str[i] == '*')
+			result[j - 2] = result[j - 2] * result[j - 1];
+		if (str[i] == '+')
+			result[j - 2] = result[j - 2] + result[j - 1];
+		if (str[i] == '-')
+			result[j - 2] = result[j - 2] - result[j - 1];
+		if (str[i] == '/')
+		{
+			if (!result[j - 1])
+			{
+				printf("Error\n");
+				return (NULL);
+			}
+			result[j - 2] = result[j - 2] / result[j - 1];
+		}
+		if (str[i] == '%')
+		{
+			if (!result[j - 1])
+			{
+				printf("Error\n");
+				return (NULL);
+			}
+			result[j - 2] = result[j - 2] % result[j - 1];
+		}
+		i++;
+		j--;
+		while (str[i] == 32)
+			i++;
 	}
-	return (0);
+	if (j > 1)
+	{
+		printf("Error\n");
+		return (NULL);
+	}
+	return (result);
 }
 
+int	main(int argc, char *argv[])
+{
+	long	*result;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	if (argc == 2 && argv[1][0])
+	{
+		result = ft_polish_calc(argv[1]);
+		if (!result)
+			return (1);
+		printf("%ld\n", result[0]);
+		free(result);
+		return (0);
+	}
+	printf("Error\n");
+	return (1);
+}
