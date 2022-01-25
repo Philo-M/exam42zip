@@ -5,67 +5,52 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/24 15:06:01 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/24 15:37:03 by imarushe         ###   ########.fr       */
+/*   Created: 2022/01/24 21:25:33 by imarushe          #+#    #+#             */
+/*   Updated: 2022/01/24 22:07:28 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 
-void	ft_putchar(char c)
+void print_memory(const void *addr, size_t size)
 {
-	if (c < 32 && c > 126)
-		c = '.';
-	write(1, &c, 1);
-}
-
-void	ft_puthex(int nbr)
-{
-	int	i;
-
-	if (nbr > 15)
-		ft_puthex(nbr / 16);
-	i = nbr % 16;
-	if (i > 10)
-		i += 'a' - 10;
-	ft_putchar(i);
-}
-
-void	print_memory(const void *addr, size_t size)
-{
-	size_t	i;
-	size_t	temp;
-	int		col;
 	unsigned char	*str;
+	char			*base = "0123456789abcdef";
+	char			line[17];
+	size_t			i;
+	int				j;
+	int				nbr;
 
-	str = (unsigned char *)addr;
 	i = 0;
-	temp = 0;
-	while (i < size)
+	str = (unsigned char *)addr;
+	while (i < size || i % 16 != 0)
 	{
-		col = 0;
-		temp = i;
-		while (col < 16)
+		if (i < size)
 		{
-			if (i < size)
-			{
-				if (str[i] < 16)
-					ft_putchar('0');
-				ft_puthex(str[i]);
-			}
+			nbr = str[i] / 16;
+			write(1, &base[nbr], 1);
+			nbr = str[i] % 16;
+			write(1, &base[nbr], 1);
+			if (str[i] >= 32 && str[i] <= 126)
+				line[i % 16] = str[i];
 			else
-				write(1, "  ", 2);
-			ft_putchar((i++ & 1) << 6);
-			col++;
+				line[i % 16] = '.';
 		}
-		i = temp;
-		while (col < 16 && i < size)
+		else
+			write(1, "  ", 2);
+		i++;
+		if (i % 2 == 0)
+			write(1, " ", 1);
+		if (i % 16 == 0)
 		{
-			ft_putchar(str[i]);
-			i++;
-			col++;
+			j = 0;
+			while(j < 16 && !(i - 16 + j >= size))
+			{
+				write(1, &line[j], 1);
+				j++;
+			}
+			write(1, "\n", 1);
 		}
-		write(1, "\n", 1);
 	}
 }
 
