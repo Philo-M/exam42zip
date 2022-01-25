@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 09:07:20 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/19 11:16:20 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/01/25 16:12:23 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,16 @@
 
 int	*ft_rrange(int start, int end)
 {
-	int				i;
-	unsigned int	size;
-	int				*result;
+	long			my_start;
+	long			my_end;
+	long			temp;
+	long			size;
+	long			i;	
+	int					*result;
 
 	size = 0;
+	my_start = (long)start;
+	my_end = (long)end;
 	if (start == end)
 	{
 		result = malloc(sizeof(int));
@@ -28,46 +33,51 @@ int	*ft_rrange(int start, int end)
 		result[0] = start;
 		return (result);
 	}
-	if (start < end)
+	if (my_start < my_end)
 	{
-		i = start;
-		while (i <= end)
+		temp = start;
+		while (temp <= end)
 		{
 			size++;
-			i++;
+			temp++;
 		}
 	}
 	if (end < start)
 	{
-		i = end;
-		while (i <= start)
+		temp = end;
+		while (temp <= start)
 		{
 			size++;
-			i++;
+			temp++;
 		}
 	}
-	result = malloc(sizeof(int) * size);
+	printf("size %lu\n", size);
+	printf("int %ld, int * %ld, long %ld, long long %ld, unsigned long long %ld, size_t %ld\n", sizeof(int), sizeof(int *), sizeof(long), sizeof(long long), sizeof(unsigned long long), sizeof(size_t));
+	result = (int *)malloc(sizeof(int) * size);
 	if (!result)
-		return (NULL);
+		return (0);
+	printf("allocated\n");
 	i = 0;
-	if (end < start)
+	if (my_end < my_start)
 	{
-		while (end <= start)
+		while (my_end <= my_start)
 		{
-			result[i] = end;
+			result[i] = my_end;
 			i++;
-			end++;
+			my_end++;
 		}
 	}
-	if (end > start)
+	if (my_end > my_start)
 	{
-		while (end >= start)
+		while (my_end >= my_start)
 		{
-			result[i] = end;
+			printf("fill in <-, my end %ld, i %lu\n", my_end, i);
+			result[i] = my_end;
 			i++;
-			end--;
+			my_end--;
 		}
 	}
+	printf("finish");
 	return (result);
 }
 
@@ -77,10 +87,10 @@ int	main(void)
 	int	*arr;
 
 	i = 0;
-	arr = ft_rrange(-3, 3);
-	while (i < 7)
+	arr = ft_rrange(-2147483648, 2147483647);
+	while (1)
 	{
-		printf("%d ", arr[i]);
+		printf("%d\n", arr[i]);
 		i++;
 	}
 	return (0);
