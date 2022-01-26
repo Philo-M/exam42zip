@@ -6,57 +6,47 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 09:07:20 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/25 17:24:09 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/01/26 14:29:54 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 int	*ft_rrange(int start, int end)
 {
-	long			my_start;
-	long			my_end;
-	long			temp;
-	long			size;
-	long			i;	
-	int					*result;
+	long int		my_start;
+	long int		my_end;
+	size_t			size;
+	size_t			i;	
+	int				*result;
 
-	size = 0;
-	my_start = (long)start;
-	my_end = (long)end;
-	if (start == end)
-	{
-		result = malloc(sizeof(int));
+	clock_t			start_all;
+	clock_t			finish_all;
+	clock_t			finish_fillin;
+	double			time;
+
+	size = 2 * 2147483648;
+	my_start = (long int)start;
+	my_end = (long int)end;
+	if (my_start == my_end)
+	{	
+		printf("equal start %ld, end %ld\n", my_start, my_end);
+		result = malloc(sizeof(long int));
 		if (!result)
 			return (NULL);
-		result[0] = start;
+		result[0] = my_start;
 		return (result);
 	}
-	if (my_start < my_end)
-	{
-		temp = start;
-		while (temp <= end)
-		{
-			size++;
-			temp++;
-		}
-	}
-	if (end < start)
-	{
-		temp = end;
-		while (temp <= start)
-		{
-			size++;
-			temp++;
-		}
-	}
 	printf("size %lu\n", size);
-//	printf("int %ld, int * %ld, long %ld, long long %ld, unsigned long long %ld, size_t %ld\n", sizeof(int), sizeof(int *), sizeof(long), sizeof(long long), sizeof(unsigned long long), sizeof(size_t));
-	result = (int *)malloc(sizeof(long) * size);
+	start_all = clock();
+	result = (int *)malloc(sizeof(int) * (size + 2));
 	if (!result)
-		return (0);
-	printf("allocated\n");
+		return (NULL);
+	finish_all = clock();
+	time = (double)(finish_all - start_all)/CLOCKS_PER_SEC;
+	printf("allocated in %f sec.\n", time);
 	i = 0;
 	if (my_end < my_start)
 	{
@@ -71,13 +61,14 @@ int	*ft_rrange(int start, int end)
 	{
 		while (my_end >= my_start)
 		{
-//			printf("fill in <-, my end %ld, i %lu\n", my_end, i);
 			result[i] = my_end;
 			i++;
 			my_end--;
 		}
 	}
-	printf("finish\n");
+	finish_fillin = clock();
+	time = (double)(finish_fillin - finish_all)/CLOCKS_PER_SEC;
+	printf("finish fillin in %f sec.\n", time);
 	return (result);
 }
 
@@ -87,10 +78,13 @@ int	main(void)
 	int	*arr;
 
 	i = 0;
-	arr = ft_rrange(2147483647, 0);
-	while (i < 50)
+	arr = ft_rrange(2147483647, -2147483648);
+	while (i < 40)
 	{
-		printf("%d\n", arr[i]);
+		if (arr)
+			printf("%d\n", arr[i]);
+		else
+			printf("Memory error\n");
 		i++;
 	}
 	return (0);
