@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 10:57:55 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/28 15:09:12 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/01/28 17:36:00 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,6 @@ int	main(int argc, char *argv[])
 			}
 			y++;
 		}
-		printf("x %d, y %d\n", x, y);
-		
 		while(ile < 10)
 		{
 			while (i < y)
@@ -127,11 +125,13 @@ int	main(int argc, char *argv[])
 				j = 0;
 				while (j < x)
 				{
-					while(map[i][j] == '.' || map[i][j] <= ile + 48)
+					while(map[i][j] == '.' || (map[i][j] >= '0' && map[i][j] <= ile + 48))
 						j++;
-					printf("j afer '.' %d\n", j);
 					if (map[i][j] == 'X')
+					{
 						ft_fillin(i, j, x, y, map, ile);
+						ile++;
+					}
 					j++;
 				}
 				i++;
@@ -144,6 +144,14 @@ int	main(int argc, char *argv[])
 			printf("%s\n", map[i]);
 			i++;
 		}
+		i = 0;
+		while (map[i])
+		{
+			free(map[i]);
+			i++;
+		}
+		free(map[i]);
+		free(map);
 	}
 	write(1, "\n", 1);
 	return (0);
