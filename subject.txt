@@ -1,15 +1,15 @@
 1.	aff_z				aff_a
-2.	rev_print			ft_strlen
+2.	rev_print			ft_strle			ft_putstrn
 3.	buzz_fizz
 4.	aff_first_param		aff_last_param
-5.	rotone				rot_13
+5.	rotone				rot_13				first_word
 6.	inter				union
 7.	ft_range			ft_rrange			ft_itoa
 8.	ft_split
 9.	ft_list_remove_if
+10.	count_islands
 
 	sort_list			ft_list_foreach		rpn_calc
 	ft_prime			ft_itoa_base		cycle_detector
 	brackets			biggest_pal			options
 	print_memory
-

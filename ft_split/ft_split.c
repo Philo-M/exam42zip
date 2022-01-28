@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 09:43:00 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/19 10:01:36 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/01/28 11:45:07 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,21 @@ char	**ft_split(char *str)
 	{
 		while (str[i] && (str[i] == 32 || (str[i] >= 9 && str[i] <= 13)))
 			i++;
-		k = 0;
-		result[j] = malloc(sizeof(char) * 1000);
-		if (!result[j])
-			return (NULL);
-		while (str[i] && !(str[i] == 32 || (str[i] >= 9 && str[i] <= 13)))
+		if (str[i] && !(str[i] == 32 || (str[i] >= 9 && str[i] <= 13)))
 		{
-			result[j][k] = str[i];
-			k++;
-			i++;
+			k = 0;
+			result[j] = malloc(sizeof(char) * 1000);
+			if (!result[j])
+				return (NULL);
+			while (str[i] && !(str[i] == 32 || (str[i] >= 9 && str[i] <= 13)))
+			{
+				result[j][k] = str[i];
+				k++;
+				i++;
+			}
+			result[j][k] = '\0';
+			j++;
 		}
-		result[j][k] = '\0';
-		j++;
-		i++;
 	}
 	result[j] = NULL;
 	return (result);
