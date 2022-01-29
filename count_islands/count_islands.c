@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 10:57:55 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/28 17:36:00 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/01/29 20:42:08 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-char	**ft_split(char *str)
+char	**ft_split(char *str, int x, int y)
 {
 	int		i;
 	int		j;
@@ -24,7 +24,7 @@ char	**ft_split(char *str)
 
 	i = 0;
 	j = 0;
-	result = malloc(sizeof(char *) * 1000);
+	result = malloc(sizeof(char *) * (y + 1));
 	if (!result)
 		return (NULL);
 	while (str[i])
@@ -34,7 +34,7 @@ char	**ft_split(char *str)
 		if (str[i] && !(str[i] == 32 || (str[i] >= 9 && str[i] <= 13)))
 		{
 			k = 0;
-			result[j] = malloc(sizeof(char) * 1000);
+			result[j] = malloc(sizeof(char) * (x + 1));
 			if (!result[j])
 				return (NULL);
 			while (str[i] && !(str[i] == 32 || (str[i] >= 9 && str[i] <= 13)))
@@ -51,32 +51,16 @@ char	**ft_split(char *str)
 	return (result);
 }
 
-char	**ft_read(char *file)
-{
-	int		fd;
-	char	*buffer;
-	char	**result;
-
-	buffer = malloc(sizeof(char) * 1024 * 1000);
-	if (!buffer)
-		return (NULL);
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-		return (NULL);
-	read(fd, buffer, 1024000);
-	result = ft_split(buffer);
-	free(buffer);
-	return (result);
-}
-
-int	ft_strlen(char *str)
+void	ft_putstr(char *str)
 {
 	int	i;
 
 	i = 0;
 	while (str[i])
+	{
+		write(1, &str[i], 1);
 		i++;
-	return (i);
+	}
 }
 
 void	ft_fillin(int i, int j, int x, int y, char **map, int ile)
@@ -95,40 +79,77 @@ void	ft_fillin(int i, int j, int x, int y, char **map, int ile)
 int	main(int argc, char *argv[])
 {
 	char	**map;
+	char	*buffer;
 	int		x;
 	int		y;
 	int		i;
 	int		j;
+	int		fd;
 	int		ile;
 
+	// Allocate maxbuffer and read the file
+	fd = open(argv[1], O_RDONLY);
+	if (fd < 0)
+		return (1);
+	buffer = malloc(1024 * 1024 * sizeof(char));
+	if (!buffer)
+		return (1);
+	i = 0;
+	while (i < 1024 * 1024)
+	{
+		buffer[i] = 0;
+		i++;
+	}
+	read(fd, buffer, 1024 * 1024);
 
+	// Calculate rows(x), columns(y) and check conditions
+	x = 0;
+	while (buffer[x] != '\n')
+		x++;
 	i = 0;
 	y = 0;
-	ile = 0;
-	if (argc == 2)
+	while (buffer[i])
 	{
-		map = ft_read(argv[1]);
-		x = ft_strlen(map[y]);
-		while (map[y])
+		if (buffer[i] != '.' && buffer[i] != 'X' && buffer[i] != '\n')
 		{
-			if (ft_strlen(map[y]) != x)
+			free(buffer);
+			write(1, "\n", 1);
+			return (1);
+		}
+		if (buffer[i] == '\n')
+		{
+			if(i % x - y)
 			{
+				free(buffer);
 				write(1, "\n", 1);
-				return (1);
+				return (0);
 			}
 			y++;
 		}
-		while(ile < 10)
+		i++;
+	}
+
+	// Keep the map int the array of arrays and free buffer
+	map = ft_split(buffer, x, y);
+	free(buffer);
+
+	// Iterate over the islands (max 10), columns and rows 
+	i = 0;
+	ile = 0;
+	if (argc == 2)
+	{
+		while (ile < 10)
 		{
 			while (i < y)
 			{
 				j = 0;
 				while (j < x)
 				{
-					while(map[i][j] == '.' || (map[i][j] >= '0' && map[i][j] <= ile + 48))
+					while (map[i][j] == '.' || (map[i][j] >= '0' && map[i][j] <= ile + 48))
 						j++;
 					if (map[i][j] == 'X')
 					{
+						//Fillin the whole island
 						ft_fillin(i, j, x, y, map, ile);
 						ile++;
 					}
@@ -138,12 +159,17 @@ int	main(int argc, char *argv[])
 			}
 			ile++;
 		}
+
+		// Print the map
 		i = 0;
 		while (map[i])
 		{
-			printf("%s\n", map[i]);
+			ft_putstr(map[i]);
+			write(1, "\n", 1);
 			i++;
 		}
+
+		// Free the array
 		i = 0;
 		while (map[i])
 		{
