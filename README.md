@@ -41,5 +41,4 @@ There is no way to know all of the tasks but all known listed below (Feb 2022):
 - Task 10
   - count_islands
 
-But you can also add new tasks and improve solution.
-Have fun!
+But you can also add new tasks and improve solutions. Have fun!
