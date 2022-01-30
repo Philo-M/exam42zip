@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 10:57:55 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/29 20:42:08 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/01/30 18:46:20 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	ft_fillin(int i, int j, int x, int y, char **map, int ile)
 		ft_fillin(i, j + 1, x, y, map, ile);
 }
 
-int	main(int argc, char *argv[])
+int	ft_count(char *file)
 {
 	char	**map;
 	char	*buffer;
@@ -88,19 +88,24 @@ int	main(int argc, char *argv[])
 	int		ile;
 
 	// Allocate maxbuffer and read the file
-	fd = open(argv[1], O_RDONLY);
+	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (1);
+		return (0);
 	buffer = malloc(1024 * 1024 * sizeof(char));
 	if (!buffer)
-		return (1);
+		return (0);
 	i = 0;
 	while (i < 1024 * 1024)
 	{
 		buffer[i] = 0;
 		i++;
 	}
-	read(fd, buffer, 1024 * 1024);
+	if (!read(fd, buffer, 1024 * 1024))
+	{
+		free(buffer);
+		return (0);
+	}
+	close(fd);
 
 	// Calculate rows(x), columns(y) and check conditions
 	x = 0;
@@ -113,15 +118,13 @@ int	main(int argc, char *argv[])
 		if (buffer[i] != '.' && buffer[i] != 'X' && buffer[i] != '\n')
 		{
 			free(buffer);
-			write(1, "\n", 1);
-			return (1);
+			return (0);
 		}
 		if (buffer[i] == '\n')
 		{
 			if(i % x - y)
 			{
 				free(buffer);
-				write(1, "\n", 1);
 				return (0);
 			}
 			y++;
@@ -136,48 +139,53 @@ int	main(int argc, char *argv[])
 	// Iterate over the islands (max 10), columns and rows 
 	i = 0;
 	ile = 0;
+	while (ile < 10)
+	{
+		while (i < y)
+		{
+			j = 0;
+			while (j < x)
+			{
+				while (map[i][j] == '.' || (map[i][j] >= '0' && map[i][j] <= ile + 48))
+					j++;
+				if (map[i][j] == 'X')
+				{
+					//Fillin the whole island
+					ft_fillin(i, j, x, y, map, ile);
+					ile++;
+				}
+				j++;
+			}
+			i++;
+		}
+		ile++;
+	}
+	// Print the map
+	i = 0;
+	while (map[i])
+	{
+		ft_putstr(map[i]);
+		write(1, "\n", 1);
+		i++;
+	}
+	// Free the array
+	i = 0;
+	while (map[i])
+	{
+		free(map[i]);
+		i++;
+	}
+	free(map[i]);
+	free(map);
+	return (1);
+}
+
+int	main(int argc, char *argv[])
+{
 	if (argc == 2)
 	{
-		while (ile < 10)
-		{
-			while (i < y)
-			{
-				j = 0;
-				while (j < x)
-				{
-					while (map[i][j] == '.' || (map[i][j] >= '0' && map[i][j] <= ile + 48))
-						j++;
-					if (map[i][j] == 'X')
-					{
-						//Fillin the whole island
-						ft_fillin(i, j, x, y, map, ile);
-						ile++;
-					}
-					j++;
-				}
-				i++;
-			}
-			ile++;
-		}
-
-		// Print the map
-		i = 0;
-		while (map[i])
-		{
-			ft_putstr(map[i]);
-			write(1, "\n", 1);
-			i++;
-		}
-
-		// Free the array
-		i = 0;
-		while (map[i])
-		{
-			free(map[i]);
-			i++;
-		}
-		free(map[i]);
-		free(map);
+		if (ft_count(argv[1]))
+			return (0);
 	}
 	write(1, "\n", 1);
 	return (0);
