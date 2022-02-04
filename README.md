@@ -35,10 +35,12 @@ There is no way to know all of the tasks but all known listed below (Feb 2022):
   - ft_range
   - ft_rrange
 - Task 8
+  - expand_str
   - ft_split
 - Task 9
   - ft_list_remove_if
 - Task 10
   - count_islands
+  - infin_mult
 
 But you can also add new tasks and improve solutions. Have fun!
