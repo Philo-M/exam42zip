@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 21:50:10 by imarushe          #+#    #+#             */
-/*   Updated: 2022/02/05 20:43:49 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/02/05 20:52:15 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,13 @@ int	main(int argc, char *argv[])
 	if (!result)
 		return (0);
 	result[sum_len] = '\0';
+	i = 0;
+	while (result[i] != '\0')
+	{
+		result[i] = 0;
+		i++;
+	}
+
 	if (!minus2)
 		len2--;
 
