@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 21:50:10 by imarushe          #+#    #+#             */
-/*   Updated: 2022/02/05 20:24:11 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/02/05 20:43:49 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,12 @@ int	main(int argc, char *argv[])
 	int		minus1;
 	int		minus2;
 	char	*result;
+
+	if (argv[1][0] == '0' || argv[2][0] == '0')
+	{
+		write(1, "0\n", 2);
+		return (0);
+	}
 
 	len1 = ft_strlen(argv[1]);
 	len2 = ft_strlen(argv[2]);
@@ -91,4 +97,6 @@ int	main(int argc, char *argv[])
 		write(1, &result[i], 1);
 		i++;
 	}
+	write(1, "\n", 1);
+	return (0);
 }
