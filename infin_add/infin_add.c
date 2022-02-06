@@ -1,107 +1,106 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   infin_mult.c                                       :+:      :+:    :+:   */
+/*   infin_add.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/04 21:50:10 by imarushe          #+#    #+#             */
-/*   Updated: 2022/02/06 11:25:24 by imarushe         ###   ########.fr       */
+/*   Created: 2022/02/06 11:28:08 by imarushe          #+#    #+#             */
+/*   Updated: 2022/02/06 19:58:54 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 
 int	ft_strlen(char *str)
 {
 	int	i;
-	
+
 	i = 0;
-	while(str[i])
+	while (str[i])
 		i++;
 	return (i);
 }
 
 int	main(int argc, char *argv[])
 {
-	(void)argc;
 
+	(void)argc;
 	int		i;
 	int		len1;
 	int		len2;
-	int		sum_len;
-	int		size;
+	int		res_len;
+
 	int		minus1;
 	int		minus2;
 	char	*result;
-
-	if (argv[1][0] == '0' || argv[2][0] == '0')
-	{
-		write(1, "0\n", 2);
-		return (0);
-	}
+	char	c1;
+	char	c2;
 
 	len1 = ft_strlen(argv[1]);
 	len2 = ft_strlen(argv[2]);
-
 	minus1 = 0;
 	minus2 = 0;
 	if (argv[1][0] == '-')
-	{
 		minus1 = 1;
-		len1--;
-	}
 	if (argv[2][0] == '-')
-	{
 		minus2 = 1;
-		len2--;
-	}
-
-	sum_len = len1 + len2;
-	result = malloc(sizeof(char) * (sum_len + 1));
+	if (len2 >= len1)
+		res_len = len2 - minus2 + 1;
+	else
+		res_len = len1 - minus1 + 1;
+//	printf("len1 %d, len2 %d, res_len %d\n", len1, len2, res_len);
+	result = malloc(sizeof(char) * (res_len + 1));
 	if (!result)
 		return (0);
 	i = 0;
-	while (i <= sum_len)
+	while (i <= res_len)
 	{
 		result[i] = 0;
 		i++;
 	}
-	result[sum_len] = '\0';
-
-
-	if (!minus2)
-		len2--;
+	result[res_len] = '\0';
+	res_len--;
+	len1--;
+	len2--;
 
 	i = 0;
-	while (len2 - i >= minus2)
+	if (minus1 - minus2 == 0)
 	{
-		size = sum_len - 1 - i;
-		len1 = ft_strlen(argv[1]) - 1;
-		while (len1 >= minus1)
+		while (i < res_len)
 		{
-			result[size] += (argv[1][len1] - 48) * (argv[2][len2 - i] - 48);
-			if (result[size] > 9)
+			if (i > len1 - minus1)
+				c1 = 0;
+			else 
+				c1 = argv[1][len1 - i] - 48;
+			if (i > len2 - minus2)
+				c2 = 0;
+			else
+				c2 = argv[2][len2 - i] - 48; 
+
+			result[res_len - i] += c1 + c2;
+			if (result[res_len - i] > 9)
 			{
-				result[size - 1] += result[size] / 10;
-				result[size] %= 10;
+				result[res_len - i - 1] += result[res_len - i] / 10;
+				result[res_len - i] %= 10;
 			}
-			size--;
-			len1--;
+
+			i++;
 		}
-		i++;
 	}
-	
+
+
+//	printf("[0] %d, len %d, [last] %d, [11] %d\n", result[0], ft_strlen(result), result[ft_strlen(result) - 1], result[11]);
+
 	i = 0;
-	if (minus1 + minus2  == 1)
-		write(1, "-", 1);
-	while (result[i] == 0)
+	while(result[i] == 0)
 		i++;
-	while (i < sum_len)
+	while (result[i] != '\0')
 	{
 		result[i] += 48;
+//		printf("i %d, [i] %d\n", i, result[i]);
 		write(1, &result[i], 1);
 		i++;
 	}
@@ -109,3 +108,19 @@ int	main(int argc, char *argv[])
 	free(result);
 	return (0);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
