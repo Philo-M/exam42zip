@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 11:28:08 by imarushe          #+#    #+#             */
-/*   Updated: 2022/02/06 19:58:54 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/02/07 11:22:11 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int	main(int argc, char *argv[])
 	char	*result;
 	char	c1;
 	char	c2;
+	char	*s1;
+	char	*s2;
 
 	len1 = ft_strlen(argv[1]);
 	len2 = ft_strlen(argv[2]);
@@ -51,7 +53,6 @@ int	main(int argc, char *argv[])
 		res_len = len2 - minus2 + 1;
 	else
 		res_len = len1 - minus1 + 1;
-//	printf("len1 %d, len2 %d, res_len %d\n", len1, len2, res_len);
 	result = malloc(sizeof(char) * (res_len + 1));
 	if (!result)
 		return (0);
@@ -90,17 +91,74 @@ int	main(int argc, char *argv[])
 			i++;
 		}
 	}
+	else
+	{
+		if (len1 - minus1 > len2 - minus2)
+		{
+			s1 = argv[1];
+			s2 = argv[2];
+		}
+		else if (len2 - minus2 > len1 - minus1)
+		{
+			s1 = argv[2];
+			s2 = argv[1];
+			minus1 = !minus1;
+		}
+		else
+		{
+			i = 0;
+			while (argv[1][i + minus1] && argv[2][i + minus2])
+			{
+				if (argv[1][i + minus1] > argv[2][i + minus2])
+				{
+					s1 = &argv[1][0 + minus1];
+					s2 = &argv[2][0 + minus2];
+					break ;
+				}
+				else if (argv[2][i + minus1] > argv[1][i + minus2])
+					{
+					s1 = &argv[2][0 + minus2];
+					s2 = &argv[1][0 + minus1];
+					minus1 = !minus1;
+					break ;
+				}
+				else
+					i++;
+			}
+		}
 
+		len1 = ft_strlen(s1) - 1;
+		len2 = ft_strlen(s2) - 1;
 
-//	printf("[0] %d, len %d, [last] %d, [11] %d\n", result[0], ft_strlen(result), result[ft_strlen(result) - 1], result[11]);
+		i = 0;
+		while (i < res_len)
+		{
+			if (i > len1 - minus1)
+				c1 = 0;
+			else 
+				c1 = s1[len1 - i] - 48;
+			if (i > len2 - !minus1)
+				c2 = 0;
+			else
+				c2 = s2[len2 - i] - 48; 
+			result[res_len - i] += c1 - c2;
+			if (result[res_len - i] < 0)
+			{
+				result[res_len - i - 1] += -1;
+				result[res_len - i] += 10;
+			}
+			i++;
+		}
+	}
 
 	i = 0;
+	if (minus1)
+		write(1, "-", 1);
 	while(result[i] == 0)
 		i++;
-	while (result[i] != '\0')
+	while (i <= res_len)
 	{
 		result[i] += 48;
-//		printf("i %d, [i] %d\n", i, result[i]);
 		write(1, &result[i], 1);
 		i++;
 	}
@@ -108,19 +166,3 @@ int	main(int argc, char *argv[])
 	free(result);
 	return (0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
