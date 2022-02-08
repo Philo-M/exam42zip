@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 10:57:55 by imarushe          #+#    #+#             */
-/*   Updated: 2022/02/08 18:01:15 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/02/08 18:13:07 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	**ft_split(char *str, int x, int y)
 			result[j] = malloc(sizeof(char) * (x + 1));
 			if (!result[j])
 			{
-				while (j-- >= 0)	
+				while (j-- >= 0)
 					free(result[j]);
 				free(result);
 				return (NULL);
@@ -109,7 +109,7 @@ int	ft_count(char *file)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (0);
-	printf("size %ld\n",size);	
+	//printf("size %ld\n",size);	
 	buffer = malloc(sizeof(char) * (size + 1));
 	if (!buffer)
 		return (0);
@@ -209,7 +209,6 @@ int	ft_count(char *file)
 		free(map[i]);
 		i++;
 	}
-	free(map[i]);
 	free(map);
 	return (1);
 }
