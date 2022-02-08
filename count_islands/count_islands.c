@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 10:57:55 by imarushe          #+#    #+#             */
-/*   Updated: 2022/01/30 18:46:20 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/02/08 13:43:11 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,15 +141,29 @@ int	ft_count(char *file)
 	ile = 0;
 	while (ile < 10)
 	{
-		while (i < y)
+		while (i < y && ile < 10) // keep 11th in 'X'
 		{
 			j = 0;
-			while (j < x)
+			while (j < x && ile < 10) // keep 11th in 'X'
 			{
 				while (map[i][j] == '.' || (map[i][j] >= '0' && map[i][j] <= ile + 48))
 					j++;
 				if (map[i][j] == 'X')
 				{
+					/* Return an error if the map contains more then 10 islands
+					if (ile = 10)
+					{
+						i = 0;
+						while (map[i])
+						{
+							free(mp[i]);
+							i++;
+						}
+						free(map[i]);
+						free(map);
+						return (0);
+					} */
+
 					//Fillin the whole island
 					ft_fillin(i, j, x, y, map, ile);
 					ile++;
