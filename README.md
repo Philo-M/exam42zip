@@ -39,6 +39,7 @@ There is no way to know all of the tasks but all known listed below (Feb 2022):
   - ft_split
 - Task 9
   - ft_list_remove_if
+  - sort_list
 - Task 10
   - count_islands
   - infin_mult
