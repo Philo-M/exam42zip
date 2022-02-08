@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 10:57:55 by imarushe          #+#    #+#             */
-/*   Updated: 2022/02/08 14:19:46 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/02/08 18:01:15 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,12 @@ char	**ft_split(char *str, int x, int y)
 			k = 0;
 			result[j] = malloc(sizeof(char) * (x + 1));
 			if (!result[j])
+			{
+				while (j-- >= 0)	
+					free(result[j]);
+				free(result);
 				return (NULL);
+			}
 			while (str[i] && !(str[i] == 32 || (str[i] >= 9 && str[i] <= 13)))
 			{
 				result[j][k] = str[i];
@@ -80,27 +85,41 @@ int	ft_count(char *file)
 {
 	char	**map;
 	char	*buffer;
+	size_t	size;
+	int		bread;
 	int		x;
 	int		y;
 	int		i;
 	int		j;
 	int		fd;
 	int		ile;
-
-	// Allocate maxbuffer and read the file
+	
+	// Determine size of the file, allocate buffer and read the file
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (0);
-	buffer = malloc(1024 * 1024 * sizeof(char));
+	buffer = malloc(sizeof(char) * 4096);
+	if (!buffer)
+		return (0);
+	size = 0;
+	while ((bread = read(fd, buffer, 1)) > 0)
+		size += bread;
+	free(buffer);
+	close(fd);
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
+		return (0);
+	printf("size %ld\n",size);	
+	buffer = malloc(sizeof(char) * (size + 1));
 	if (!buffer)
 		return (0);
 	i = 0;
-	while (i < 1024 * 1024)
+	while ((size_t)i <= size)
 	{
 		buffer[i] = 0;
 		i++;
 	}
-	if (!read(fd, buffer, 1024 * 1024))
+	if (read(fd, buffer, size) <= 0)
 	{
 		free(buffer);
 		return (0);
@@ -122,12 +141,13 @@ int	ft_count(char *file)
 		}
 		if (buffer[i] == '\n')
 		{
-			if(i % x - y)
+			y++;
+			//printf("i %d, x %d, y %d, check %d\n", i, x, y, i-x*y-y+1);
+			if(x && i-x*y-y+1)
 			{
 				free(buffer);
 				return (0);
-			}
-			y++;
+			} 	
 		}
 		i++;
 	}
