@@ -6,7 +6,7 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 10:57:55 by imarushe          #+#    #+#             */
-/*   Updated: 2022/02/08 18:13:07 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/02/08 23:21:08 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,15 +142,17 @@ int	ft_count(char *file)
 		if (buffer[i] == '\n')
 		{
 			y++;
-			//printf("i %d, x %d, y %d, check %d\n", i, x, y, i-x*y-y+1);
-			if(x && i-x*y-y+1)
+			printf("check %d\n", i-x*y-y+1);
+			if(i-x*y-y+1)
 			{
 				free(buffer);
 				return (0);
-			} 	
+			} 
 		}
 		i++;
 	}
+	printf("size %ld, x %d, y %d\n", size, x, y);
+
 
 	// Keep the map int the array of arrays and free buffer
 	map = ft_split(buffer, x, y);
@@ -179,7 +181,6 @@ int	ft_count(char *file)
 							free(map[i]);
 							i++;
 						}
-						free(map[i]);
 						free(map);
 						return (0);
 					} */
