@@ -6,112 +6,125 @@
 /*   By: imarushe <imarushe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 14:05:50 by imarushe          #+#    #+#             */
-/*   Updated: 2022/02/07 16:41:36 by imarushe         ###   ########.fr       */
+/*   Updated: 2022/02/16 09:38:04 by imarushe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <stdio.h>
+#include <unistd.h>
 
+static int	result;
 
-int	ft_read(int	max, char *str)
+int	ft_atoi(char **str)
 {
-	int		i;
-	int		j;
 	
-	int		k;
-	int		size;
+	int nbr;
 
-	int		*a;
-	int		*b;
+	nbr = 0;
+	while (**str >= '0' && **str <= '9')
+	{
+		nbr = nbr * 10 + **str - 48;
+		(*str)++;
+	}
+	if (**str)
+		(*str)++;
+	return (nbr);
+}
+
+void	ft_putnbr(int nbr)
+{
+	if (nbr > 9)
+		ft_putnbr(nbr / 10);
+	nbr = nbr % 10 + 48;
+	write(1, &nbr, 1);
+}
+
+int	ft_max(char *str)
+{
+	int	max;
+	int	nbr;
+
+	max = 0;
+	while (*str)
+	{
+		nbr = ft_atoi(&str);
+		if (nbr > max)
+			max = nbr;
+	}
+	return (max);
+}
+
+void ft_path(int max, int matrix[max][max], int chain[max], int step, int length)
+{
+	int	i;
 
 	i = 0;
-	size = 0;
-	while (str[i])
+	chain[step] = 1;
+	while (i < max)
 	{
-		if (str[i] == '-')
-			size++;
+		if (!chain[i] && matrix[step][i])
+		{
+			if (result < length + 1)
+				result = length + 1;
+			ft_path(max, matrix, chain, i, length + 1);
+		}
 		i++;
 	}
-
-	a = (int *)malloc(sizeof(int) * size);
-	if (!a)
-		return (0);
-	b = (int *)malloc(sizeof(int)* size);
-	if (!b)
-		return (0);
-
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (str[i] == 32)
-			i++;
-		if (str[i] >= '0' && str[i] <= '9')
-			a[j] = atoi(&str[i]);
-		while (str[i] >= '0' && str[i] <= '9')
-			i++;
-		if (str[i] == '-')
-			i++;
-		if (str[i] >= '0' && str[i] <= '9')
-			b[j] = atoi(&str[i]);
-		while (str[i] >= '0' && str[i] <= '9')
-			i++;
-		j++;
-	}
-	
-	k = 0;
-	while (k < j)
-	{
-		printf("%d-%d ", a[k], b[k]);
-		k++;
-	}
-	printf("\n");
-
-	int	min_a = 2147483647;
-	int	min_b = 2147483647;
-	int	max_a = 0;
-	int max_b = 0;
-
-	k = 0;
-	while(k < j)
-	{
-		if (a[k] < min_a)
-			min_a = a[k];
-		if (a[k] > max_a)
-			max_a = a[k];
-		if (b[k] < min_b)
-			min_b = b[k];
-		if (b[k] > max_b)
-			max_b = b[k];
-		k++;
-	}
-	printf("min_a %d, max_a %d, min_b %d, max_b %d\n", min_a, max_a, min_b, max_b);
-
-
-
-
-
-
-
-
-
+	chain[step] = 0;
 }
+
+void	ft_matrix(int max, char *str)
+{
+	int	i;
+	int	step;
+	int	matrix[max][max];
+	int	chain[max];
+
+	step = 0;
+	while (step < max)
+	{
+		i = 0;
+		while (i < max)
+		{
+			matrix[step][i] = 0;
+			i++;
+		}
+		step++;
+	}
+	i = 0;
+	while (i < max)
+	{
+		chain[i] = 0;
+		i++;
+	}
+	while (*str)
+	{
+		step = ft_atoi(&str);
+		i = ft_atoi(&str);
+		matrix[step][i] = 1;
+		matrix[i][step] = 1;
+	}
+	result = 2;
+	step = 0;
+	while (step < max)
+	{
+		ft_path(max, matrix, chain, step, 1);
+		step++;
+	}
+}
+
 
 int	main(int argc, char *argv[])
 {
-	static int	max = 0;
+	int	max;
 
 	if (argc == 2)
 	{
-		ft_read(max, argv[1]);
+		max = ft_max(argv[1]);
+		ft_matrix(max + 1, argv[1]);
+		ft_putnbr(result);
 	}
+	write(1, "\n", 1);
 	return (0);
 }
-
-
-
-
-
-
 
