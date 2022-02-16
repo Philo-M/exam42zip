@@ -30,6 +30,7 @@ There is no way to know all of the tasks but all known listed below (Feb 2022):
 - Task 6
   - inter
   - union
+  - last_word
 - Task 7
   - ft_itoa
   - ft_range
@@ -43,5 +44,6 @@ There is no way to know all of the tasks but all known listed below (Feb 2022):
 - Task 10
   - count_islands
   - infin_mult
+  - g_diam
 
 But you can also add new tasks and improve solutions. Have fun!
