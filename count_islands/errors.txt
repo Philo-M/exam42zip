@@ -1,4 +1,0 @@
-free momry inside ft_split
-size of yhe buffer
-2 EOL
-2 x
