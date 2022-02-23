@@ -27,7 +27,7 @@ t_list	*sort_list(t_list *lst, int (*cmp)(int, int))
 	first = lst;
 	while (lst->next)
 	{
-		if (!cmp(*(int *)lst->data, *(int *)lst->next->data))
+		if (!cmp(lst->data, lst->next->data))
 		{
 			swap = lst->data;
 			lst->data = lst->next->data;
@@ -55,19 +55,19 @@ int	main(void)
 	l = 4;
 	i = 1;
 	list = malloc(sizeof(t_list *));
-	list->data = &k;
+	list->data = k;
 	list->next = malloc(sizeof(t_list *));
-	list->next->data = &j;
+	list->next->data = j;
 	list->next->next = malloc(sizeof(t_list *));
-	list->next->next->data = &l;
+	list->next->next->data = l;
 	list->next->next->next = malloc(sizeof(t_list *));
-	list->next->next->next->data = &i;
+	list->next->next->next->data = i;
 	list->next->next->next->next = NULL;
 	first = sort_list(list, cmp);
-	printf("first %d\n", *(int *)first->data);
+	printf("first %d\n", first->data);
 	while (list)
 	{
-		printf("%d\n", *(int *)list->data);
+		printf("%d\n", list->data);
 		list = list->next;
 	}
 	return (0);
