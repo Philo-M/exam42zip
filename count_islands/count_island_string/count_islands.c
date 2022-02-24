@@ -72,7 +72,7 @@ void	ft_fill(char *str, int	i, int	nb)
 	int	len_0 = ft_strlen_c(str, '\n') + 1;
 	int	len_f = ft_strlen_c(str, '\0') + 1;
 
-	if (str[i] == 'X' && i < len_f)
+	if (i < len_f && i >= 0 && str[i] == 'X')
 	{
 		str[i] = '0' + nb;
 		ft_fill(str, i + 1, nb);
