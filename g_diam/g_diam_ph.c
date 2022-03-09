@@ -1,6 +1,6 @@
 #include <unistd.h>
 
-int	nodes = 2;
+static int	nodes = 2;
 
 int	ft_edge(char **s)
 {
@@ -8,8 +8,8 @@ int	ft_edge(char **s)
 
 	while (**s && **s >= '0' && **s <= '9')
 	{
-		nb = nb * 10  + (**s - 48);
-		(*s)++;	
+		nb = nb * 10 + **s - 48;
+		(*s)++;
 	}
 	if (**s)
 		(*s)++;
@@ -26,7 +26,7 @@ void	ft_putnbr(int nb)
 	write(1, &c, 1);
 }
 
-void	ft_nodes(int max, int path[max], int grid[max][max], int y, int pos)
+void	ft_nodes(int max, int path[max], int grid[max][max], int y, int len)
 {
 	int	x;
 
@@ -34,17 +34,17 @@ void	ft_nodes(int max, int path[max], int grid[max][max], int y, int pos)
 	x = -1;
 	while (++x < max)
 	{
-		if (path[x] == 0 && grid[x][y] == 1)
+		if (path[x] == 0 && grid[x][y])
 		{
-			if (nodes < pos + 1)
-				nodes = pos + 1;
-			ft_nodes(max, path, grid, x, pos + 1);
+			if (nodes < len + 1)
+				nodes = len + 1;
+			ft_nodes(max, path, grid, x, len + 1);
 		}
 	}
 	path[y] = 0;
 }
 
-void	ft_graph(int max, char *str)
+void	ft_graph(char *str, int max)
 {
 	int	path[max];
 	int	grid[max][max];
@@ -70,22 +70,22 @@ void	ft_graph(int max, char *str)
 	}
 	y = -1;
 	while (++y < max)
-		ft_nodes(max, path, grid, y, 1); 
+		ft_nodes(max, path, grid, y, 1);
 }
 
 int	main(int argc, char **argv)
 {
 	char	*str;
 	int		max = 0;
-	int		tmp = 0;
-	
+	int		tmp;
+
 	if (argc == 2)
 	{
 		str = argv[1];
 		if (str[0] == '\0')
-			ft_putnbr(0);
-		else if (ft_edge(&str) == ft_edge(&str) && *str == '\0' && *str == '\0')
-			ft_putnbr(1);
+			nodes = 0;
+		else if ((ft_edge(&str) == ft_edge(&str)) && *str == '\0')
+			nodes = 1;
 		else
 		{
 			while (*str)
@@ -94,11 +94,11 @@ int	main(int argc, char **argv)
 				if (tmp > max)
 					max = tmp;
 			}
-			max++;
+			max ++;
 			str = argv[1];
-			ft_graph(max, str);
-			ft_putnbr(nodes);
+			ft_graph(str, max);
 		}
+		ft_putnbr(nodes);
 	}
 	write(1, "\n", 1);
 	return (0);
